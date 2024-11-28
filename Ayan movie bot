@@ -1,0 +1,50 @@
+import requests
+
+OMDB_API_KEY = "8e727644"
+
+def fetch_movie_details(movie_name):
+    # Fetch movie details from OMDb API based on movie name
+    url = "http://www.omdbapi.com/"
+    params = {
+        't': movie_name,  # Search by movie name
+        'plot': 'full',   # To get full plot details
+        'apikey': OMDB_API_KEY
+    }
+    
+    response = requests.get(url, params=params)  # Corrected response assignment
+    
+    if response.status_code != 200:  # Changed to check if response is not successful
+        print("Failed to retrieve movie details from OMDb API.")
+        return None
+
+    movie_data = response.json()
+
+    if movie_data.get("Response") == "False":  # Corrected string formatting
+        print(f"Movie '{movie_name}' not found.")
+        return None
+
+    return movie_data
+
+def main():
+    print("Welcome to the Movie Info Bot!")
+
+    while True:
+        # Ask the user to input the movie name
+        movie_name = input("Enter the name of the movie you want details for or type 'stop' to end: ")
+
+        if movie_name.lower() == 'stop':  # Fixed condition to check if the input is 'stop'
+            break  # Corrected break syntax
+
+        # Fetch and display the movie details
+        movie_data = fetch_movie_details(movie_name)  # Corrected variable assignment
+
+        if movie_data:  # Check if movie_data is not None
+            response = (f"Movie: {movie_data['Title']} ({movie_data['Year']})\n"  # Fixed string formatting
+                        f"Rating: {movie_data['imdbRating']}\n"
+                        f"Director: {movie_data['Director']}\n"
+                        f"Actors: {movie_data['Actors']}\n"
+                        f"Plot: {movie_data['Plot']}")
+            print(response)  # Moved print statement to display the response
+
+if _name_ == "_main":  # Corrected __name_ check
+    main()
