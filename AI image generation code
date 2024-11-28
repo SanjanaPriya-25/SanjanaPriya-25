@@ -1,0 +1,159 @@
+HTML:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Generation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>AI Image Generator</h1>
+    </header>
+    <main>
+        <div class="container">
+            <form id="imageForm">
+                <label for="prompt">Enter your image description:</label>
+                <textarea id="prompt" placeholder="Type something imaginative..." required></textarea>
+                <button type="submit">Generate Image</button>
+            </form>
+            <div id="result" class="result hidden">
+                <h3>Generated Image:</h3>
+                <img id="generatedImage" alt="AI Generated Output" />
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2024 AI Image Generator</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+
+CSS:
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 1em 0;
+}
+
+h1 {
+    margin: 0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+}
+
+button {
+    padding: 0.75em;
+    font-size: 1em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.result {
+    margin-top: 2em;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    text-align: center;
+    padding: 1em 0;
+    background: #4CAF50;
+    color: white;
+}
+
+Java script code
+// script.js
+
+document.getElementById('imageForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const prompt = document.getElementById('prompt').value;
+    const resultDiv = document.getElementById('result');
+    const generatedImage = document.getElementById('generatedImage');
+
+    // Show loading state
+    generatedImage.src = '';
+    resultDiv.classList.remove('hidden');
+    resultDiv.querySelector('h3').textContent = "Generating...";
+
+    try {
+        // Replace with your AI image generation API URL
+        const response = await fetch('https://api.example.com/generate-image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer YOUR_API_KEY' // Add API key if needed
+            },
+            body: JSON.stringify({ prompt })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error generating image');
+        }
+
+        const data = await response.json();
+        generatedImage.src = data.imageUrl; // Ensure the API returns the image URL
+        resultDiv.querySelector('h3').textContent = "Generated Image:";
+    } catch (error) {
+        resultDiv.querySelector('h3').textContent = "Error generating image.";
+        console.error(error);
+    }
+});
